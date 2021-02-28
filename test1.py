@@ -1,0 +1,45 @@
+from thinkgear import *
+
+payloads = {10: b'\x10\xff\x04\x0a\x32\x32\x00\x04\x08\x40\x64\x00\x04\x08\x40\x64\x01',
+            20: b'\x10\xff\x04\x0a\x32\x32\x00\x04\x08\x40\x64\x00\x04\x08\x40\x64\x01',
+            30: b'\x10\xff\x04\x0a\x32\x32\x00\x04\x08\x40\x64\x00\x04\x08\x40\x64\x01',
+            40: b'\x10\xff\x04\x0a\x32\x32\x00\x04\x08\x40\x64\x00\x04\x08\x40\x64\x01',
+            50: b'\x10\xff\x04\x0a\x32\x32\x00\x04\x08\x40\x64\x00\x04\x08\x40\x64\x01',
+            60: b'\x10\xff\x04\x0a\x32\x32\x00\x04\x08\x40\x64\x00\x04\x08\x40\x64\x01',
+            70: b'\x10\xff\x04\x0a\x32\x32\x00\x04\x08\x40\x64\x00\x04\x08\x40\x64\x01',
+            80: b'\x10\xff\x04\x0a\x32\x32\x00\x04\x08\x40\x64\x00\x04\x08\x40\x64\x01',
+            90: b'\x10\xff\x04\x0a\x32\x32\x00\x04\x08\x40\x64\x00\x04\x08\x40\x64\x01',
+            100: b'\x10\xff\x04\x0a\x32\x32\x00\x04\x08\x40\x64\x00\x04\x08\x40\x64\x01'}
+
+
+def send_fugu_cmd_privet(value, device):
+    i = 0
+    if 0 <= value <= 10:
+        i = 10
+    elif 10 < value <= 20:
+        i = 20
+    elif 20 < value <= 30:
+        i = 30
+    elif 30 < value <= 40:
+        i = 40
+    elif 40 < value <= 50:
+        i = 50
+    elif 50 < value <= 60:
+        i = 60
+    elif 60 < value <= 70:
+        i = 70
+    elif 70 < value <= 80:
+        i = 80
+    elif 80 < value <= 90:
+        i = 90
+    elif 90 < value <= 100:
+        i = 100
+    device.writeCharacteristic(handle=3, val=payloads[i])
+
+
+tg = ThinkGearProtocol('/dev/rfcomm1')
+for pkt in tg.get_packets():
+    print(pkt)
+    for d in pkt:
+        if isinstance(d, ThinkGearAttentionData):
+            print('Attention:', d.value)
